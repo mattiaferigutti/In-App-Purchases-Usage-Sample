@@ -51,19 +51,19 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
     }
 
     override fun onProductPurchased(productId: String, details: TransactionDetails?) {
-        Log.v(TAG, "$productId was successfully purchased")
+        Log.d(TAG, "$productId was successfully purchased")
         /*
         * Called when requested PRODUCT ID was successfully purchased
         */
 
         if (productId == PRODUCT_ID) {
-            Log.v(TAG, "right id code")
+            Log.d(TAG, "right id code")
             updateForPremiumUsers()
         }
     }
 
     override fun onPurchaseHistoryRestored() {
-        Log.v(TAG, "onPurchaseHistoryRestored")
+        Log.d(TAG, "onPurchaseHistoryRestored has been called")
         /*
         * Called when purchase history was restored and the list of all owned PRODUCT ID's
         * was loaded from Google Play
@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
     }
 
     override fun onBillingError(errorCode: Int, error: Throwable?) {
-        Log.v(TAG, "onBillingError")
+        Log.d(TAG, "onBillingError has been called")
+        Log.e(TAG, "error: ${error.toString()}")
         /*
         * Called when some error occurred. See Constants class for more details
         *
@@ -83,14 +84,14 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
     }
 
     override fun onBillingInitialized() {
-        Log.v(TAG, "onBillingInitialized")
+        Log.d(TAG, "onBillingInitialized has been called")
         /*
         * Called when BillingProcessor was initialized and it's ready to purchase
         */
 
         billingProcessor?.getPurchaseListingDetails(PRODUCT_ID)
         if (billingProcessor?.isPurchased(PRODUCT_ID) == true) {
-            Log.v("TAG_IN_APP", "PRODUCT ID was successfully purchased")
+            Log.d(TAG, "$PRODUCT_ID was successfully purchased")
         }
     }
 
