@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
 
     companion object {
         val TAG = MainActivity::class.java.name + ".TAG_IN_APP"
-        const val PRODUCT_ID = "pro_version_test_1"
+        const val PRODUCT_ID = "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE"
         const val LICENSE_KEY = "YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE"
     }
 }
