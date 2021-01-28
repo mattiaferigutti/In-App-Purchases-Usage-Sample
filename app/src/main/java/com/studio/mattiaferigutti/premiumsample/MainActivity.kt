@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,17 +22,6 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         button.setOnClickListener {
             purchaseProduct()
         }
-
-        if (isPremiumUser()) {
-            updateForPremiumUsers()
-        }
-    }
-
-    /**
-     * @return true if the product has been purchased. Otherwise it returns false.
-     */
-    private fun isPremiumUser() : Boolean {
-        return billingProcessor?.isPurchased(PRODUCT_ID) == true
     }
 
     private fun purchaseProduct() {
@@ -89,10 +79,24 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         * Called when BillingProcessor was initialized and it's ready to purchase
         */
 
-        billingProcessor?.getPurchaseListingDetails(PRODUCT_ID)
-        if (billingProcessor?.isPurchased(PRODUCT_ID) == true) {
+        billingProcessor?.loadOwnedPurchasesFromGoogle()
+        if (isPremiumUser()) {
             Log.d(TAG, "$PRODUCT_ID was successfully purchased")
+            updateForPremiumUsers()
         }
+    }
+
+    /**
+     * @return true if the product has been purchased. Otherwise it returns false.
+     */
+    private fun isPremiumUser() =
+            billingProcessor?.isPurchased(PRODUCT_ID) == true
+
+    /**
+     * call this method to undo the payment and restore the free version
+     */
+    private fun resetPayment() {
+        billingProcessor?.consumePurchase(PRODUCT_ID)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -108,7 +112,7 @@ class MainActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
 
     companion object {
         val TAG = MainActivity::class.java.name + ".TAG_IN_APP"
-        const val PRODUCT_ID = "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE"
-        const val LICENSE_KEY = "YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE"
+        const val PRODUCT_ID = "YOUR PRODUCT ID"
+        const val LICENSE_KEY = "YOUR LICENSE KEY"
     }
 }
